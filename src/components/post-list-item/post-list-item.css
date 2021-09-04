@@ -1,5 +1,8 @@
 .app-list-item {
   font-size: 1.25rem;
+  padding-left: 1rem;
+  background-color: #fff;
+  margin-bottom: 10px;
 }
 
 .app-list-item button {
@@ -9,6 +12,7 @@
   font-size: 17px;
   border: none;
   cursor: pointer;
+  background-color: #fff;
 }
 .app-list-item button:focus {
     box-shadow: none;
@@ -31,7 +35,17 @@
     transform: translateX(30px);
     opacity: 0;
 }
-
+.app-list-item-post-container {
+  align-items: center;
+  justify-content: space-between;
+}
+.app-list-item-post-container .fa-thumbs-up {
+  margin-left: 50px;
+  cursor: pointer;
+}
+.app-list-item-post-container .fa-thumbs-up:hover {
+  transform: scale(1.2);
+}
 .app-list-item-label {
   display: block;
   line-height: 35px;
@@ -43,6 +57,9 @@
 .app-list-item.like .fa-heart {
     opacity: 1;
     transform: translateX(0px);
+}
+.app-list-item.like .fa-thumbs-up {
+  color: red;
 }
 
 .app-list-item.important .app-list-item-label {
