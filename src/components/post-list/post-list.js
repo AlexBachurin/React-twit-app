@@ -8,7 +8,7 @@ function isObject (item) {
     return (typeof item === "object" && !Array.isArray(item) && item !== null && (item instanceof Date === false));
 }
 
-const PostList = ({ posts }) => {
+const PostList = ({ posts, onDelete }) => {
     //take data from props and transform it to jsx
     const elems = posts.map(item => {
         //check if item is an object, then we pass further, if not continue with next item
@@ -17,7 +17,10 @@ const PostList = ({ posts }) => {
             const { id } = item;
             return (
                 <li key={id} className='list-group-item'>
-                    <PostListItem onDelete={()=>console.log('deleted')} label={item.label} important={item.important} />
+                    <PostListItem onDelete={() => onDelete(id)} 
+                    label={item.label} 
+                    important={item.important} 
+                    />
                 </li>
             )
         }
