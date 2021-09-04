@@ -13,13 +13,16 @@ export default class App extends Component {
         super(props)
         this.state = {
             data: [
-                { label: 'Want to learn react', important: true, id: 'qqweqe' },
-                { label: 'Wanna play tennis', important: false, id: 'wewq12ewq' },
-                { label: 'Gotta sleep', important: false, id: 'sadas12asa' }
+                { label: 'Want to learn react', favorite: true, liked: false, id: 'qqweqe' },
+                { label: 'Wanna play tennis', favorite: false, liked: false, id: 'wewq12ewq' },
+                { label: 'Gotta sleep', favorite: false, liked: false, id: 'sadas12asa' }
             ]
         }
+        this.maxId = 4;
         this.deleteItem = this.deleteItem.bind(this);
         this.addItem = this.addItem.bind(this);
+        this.onToggleFavorite = this.onToggleFavorite.bind(this);
+        this.onToggleLike = this.onToggleLike.bind(this);
     }
 
     deleteItem(id) {
@@ -28,8 +31,8 @@ export default class App extends Component {
             const index = data.findIndex((item) => {
                 return item.id = id;
             })
-        //create two new arrays excluding item that we need to delete
-        //bcz we cant mutate state data
+            //create two new arrays excluding item that we need to delete
+            //bcz we cant mutate state data
             const beforeArr = data.slice(0, index);
             const afterArr = data.slice(index + 1);
             return {
@@ -39,33 +42,67 @@ export default class App extends Component {
 
     }
     addItem(body) {
+        // const newItem = {
+        //     label: body,
+        //     favorite: false,
+        //     id: this.maxId++
+        // }
         // this.setState(({data}) => {
-        //     const newItem = {
-        //         label: body,
-        //         important: false,
-        //         id: 'qzzzqe'
-        //     }
+
         //     const newData = [newItem, ...data];
 
         //     return {
         //         data: newData
         //     }
         // })
-        console.log('added')
+    }
+
+    onToggleFavorite(id) {
+        console.log(`favorite ${id}`)
+    }
+    onToggleLike(id) {
+        this.setState(({ data }) => {
+            //get elem by in data by index
+            const index = data.findIndex(item => item.id === id);
+            const oldElem = data[index];
+            //create new elem with changed like property
+            const newElem = {...oldElem, liked : !oldElem.liked}
+            //create new array to not mutate array and add changed property into newly
+            //created arr
+            const beforeArr = data.slice(0, index);
+            const afterArr = data.slice(index + 1);
+            const newArr = [...beforeArr, newElem, ...afterArr];
+            console.log(newArr)
+            //change state
+            return {
+                data: newArr
+            }
+
+        })
+        console.log(`like ${id}`)
     }
 
     render() {
+        //counter for liked posts
+        const likedPosts = this.state.data.filter(item => item.liked).length;
+        const postsLength = this.state.data.length;
         return (
             <div className='app'>
-                <AppHeader />
+                <AppHeader 
+                    likedPosts={likedPosts}
+                    postsLength={postsLength}
+                 />
                 <div className="search-panel d-flex">
                     <SearchPanel />
                     <PostStatusFilter />
                 </div>
                 <PostList
                     onDelete={this.deleteItem}
-                    posts={this.state.data} />
-                <PostAddForm 
+                    posts={this.state.data}
+                    onToggleFavorite={this.onToggleFavorite}
+                    onToggleLike={this.onToggleLike}
+                />
+                <PostAddForm
                     onAdd={this.addItem}
                 />
             </div>

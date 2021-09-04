@@ -62,10 +62,10 @@
   color: red;
 }
 
-.app-list-item.important .app-list-item-label {
+.app-list-item.favorite .app-list-item-label {
   color: #FFD700;
 }
 
-.app-list-item.important .btn-star {
+.app-list-item.favorite .btn-star {
     color: #aeaeae;
 }
