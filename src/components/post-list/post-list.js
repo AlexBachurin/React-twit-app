@@ -23,6 +23,7 @@ const PostList = ({ posts, onDelete, onToggleFavorite, onToggleLike }) => {
                         onToggleLike={() => onToggleLike(id)}
                         label={item.label}
                         favorite={item.favorite}
+                        liked={item.liked}
                     />
                 </li>
             )

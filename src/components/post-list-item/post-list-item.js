@@ -12,6 +12,7 @@ export default class PostListItem extends Component {
         if (favorite) {
             classNames += ' favorite'
         }
+
         if (liked) {
             classNames += ' like'
         }

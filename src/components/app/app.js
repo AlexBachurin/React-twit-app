@@ -42,23 +42,39 @@ export default class App extends Component {
 
     }
     addItem(body) {
-        // const newItem = {
-        //     label: body,
-        //     favorite: false,
-        //     id: this.maxId++
-        // }
-        // this.setState(({data}) => {
+        const newItem = {
+            label: body,
+            favorite: false,
+            id: this.maxId++
+        }
+        this.setState(({data}) => {
 
-        //     const newData = [newItem, ...data];
+            const newData = [newItem, ...data];
 
-        //     return {
-        //         data: newData
-        //     }
-        // })
+            return {
+                data: newData
+            }
+        })
     }
 
     onToggleFavorite(id) {
-        console.log(`favorite ${id}`)
+        this.setState(({ data }) => {
+            //get elem by in data by index
+            const index = data.findIndex(item => item.id === id);
+            const oldElem = data[index];
+            //create new elem with changed like property
+            const newElem = {...oldElem, favorite : !oldElem.favorite}
+            //create new array to not mutate array and add changed property into newly
+            //created arr
+            const beforeArr = data.slice(0, index);
+            const afterArr = data.slice(index + 1);
+            const newArr = [...beforeArr, newElem, ...afterArr];
+            //change state
+            return {
+                data: newArr
+            }
+
+        })
     }
     onToggleLike(id) {
         this.setState(({ data }) => {
@@ -72,7 +88,6 @@ export default class App extends Component {
             const beforeArr = data.slice(0, index);
             const afterArr = data.slice(index + 1);
             const newArr = [...beforeArr, newElem, ...afterArr];
-            console.log(newArr)
             //change state
             return {
                 data: newArr
@@ -85,12 +100,13 @@ export default class App extends Component {
     render() {
         //counter for liked posts
         const likedPosts = this.state.data.filter(item => item.liked).length;
-        const postsLength = this.state.data.length;
+        //get all posts length
+        const allPosts = this.state.data.length;
         return (
             <div className='app'>
                 <AppHeader 
                     likedPosts={likedPosts}
-                    postsLength={postsLength}
+                    allPosts={allPosts}
                  />
                 <div className="search-panel d-flex">
                     <SearchPanel />
