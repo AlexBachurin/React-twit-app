@@ -17,7 +17,8 @@ export default class App extends Component {
                 { label: 'Wanna play tennis', favorite: false, liked: false, id: 'wewq12ewq' },
                 { label: 'Gotta sleep', favorite: false, liked: false, id: 'sadas12asa' }
             ],
-            searchTerm: ''
+            searchTerm: '',
+            filter: 'all'
         }
         this.maxId = 4;
         this.deleteItem = this.deleteItem.bind(this);
@@ -26,6 +27,7 @@ export default class App extends Component {
         this.onToggleLike = this.onToggleLike.bind(this);
         this.searchPost = this.searchPost.bind(this);
         this.onSearchUpdate = this.onSearchUpdate.bind(this);
+        this.onFilterSelect = this.onFilterSelect.bind(this);
     }
     //SEARCH POST
     searchPost(items, term) {
@@ -118,6 +120,19 @@ export default class App extends Component {
         })
         console.log(`like ${id}`)
     }
+    //FILTER
+    filterPosts(items, filterRule) {
+       if (filterRule === 'liked') {
+           return items.filter(item => item.liked);
+       } else {
+           return items;
+       }
+    }
+    onFilterSelect(filterRule) {
+        this.setState({
+            filter: filterRule
+        })
+    }
 
     render() {
         //counter for liked posts
@@ -125,9 +140,9 @@ export default class App extends Component {
         //get all posts length
         const allPosts = this.state.data.length;
         // //get data and searchTerm
-        const { data, searchTerm } = this.state;
+        const { data, searchTerm, filter } = this.state;
         // //get visible posts
-        const visiblePosts = this.searchPost(data, searchTerm);
+        const visiblePosts = this.filterPosts(this.searchPost(data, searchTerm), filter);
         return (
             <div className='app'>
                 <AppHeader
@@ -136,7 +151,10 @@ export default class App extends Component {
                 />
                 <div className="search-panel d-flex">
                     <SearchPanel onSearchUpdate={this.onSearchUpdate} />
-                    <PostStatusFilter />
+                    <PostStatusFilter 
+                    filter={filter}
+                    onFilterSelect={this.onFilterSelect}
+                    />
                 </div>
                 <PostList
                     onDelete={this.deleteItem}
