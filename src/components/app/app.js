@@ -28,6 +28,7 @@ export default class App extends Component {
         this.searchPost = this.searchPost.bind(this);
         this.onSearchUpdate = this.onSearchUpdate.bind(this);
         this.onFilterSelect = this.onFilterSelect.bind(this);
+        this.toggle = this.toggle.bind(this);
     }
     //SEARCH POST
     searchPost(items, term) {
@@ -72,7 +73,7 @@ export default class App extends Component {
         this.setState(({ data }) => {
 
             const newData = [newItem, ...data];
-
+            
             return {
                 data: newData
             }
@@ -80,33 +81,28 @@ export default class App extends Component {
     }
 
     //TOGGLE FAVORITE POST
-    onToggleFavorite(id) {
-        this.setState(({ data }) => {
-            //get elem by in data by index
-            const index = data.findIndex(item => item.id === id);
-            const oldElem = data[index];
-            //create new elem with changed like property
-            const newElem = { ...oldElem, favorite: !oldElem.favorite }
-            //create new array to not mutate array and add changed property into newly
-            //created arr
-            const beforeArr = data.slice(0, index);
-            const afterArr = data.slice(index + 1);
-            const newArr = [...beforeArr, newElem, ...afterArr];
-            //change state
-            return {
-                data: newArr
-            }
-
-        })
+    onToggleFavorite(id, value) {
+        this.toggle(id, value);
     }
     //TOGGLE LIKE
-    onToggleLike(id) {
+    onToggleLike(id, value) {
+        this.toggle(id, value);
+
+    }
+    //helper for toggle like/favorite
+    toggle(id, value) {
         this.setState(({ data }) => {
             //get elem by in data by index
             const index = data.findIndex(item => item.id === id);
             const oldElem = data[index];
-            //create new elem with changed like property
-            const newElem = { ...oldElem, liked: !oldElem.liked }
+            let newElem = '';
+            if (value === 'liked') {
+                //create new elem with changed like property
+                newElem = { ...oldElem, liked: !oldElem.liked }
+            } else {
+                newElem = { ...oldElem, favorite: !oldElem.favorite }
+            }
+
             //create new array to not mutate array and add changed property into newly
             //created arr
             const beforeArr = data.slice(0, index);
@@ -116,17 +112,16 @@ export default class App extends Component {
             return {
                 data: newArr
             }
-
         })
-        console.log(`like ${id}`)
+
     }
     //FILTER
     filterPosts(items, filterRule) {
-       if (filterRule === 'liked') {
-           return items.filter(item => item.liked);
-       } else {
-           return items;
-       }
+        if (filterRule === 'liked') {
+            return items.filter(item => item.liked);
+        } else {
+            return items;
+        }
     }
     onFilterSelect(filterRule) {
         this.setState({
@@ -151,9 +146,9 @@ export default class App extends Component {
                 />
                 <div className="search-panel d-flex">
                     <SearchPanel onSearchUpdate={this.onSearchUpdate} />
-                    <PostStatusFilter 
-                    filter={filter}
-                    onFilterSelect={this.onFilterSelect}
+                    <PostStatusFilter
+                        filter={filter}
+                        onFilterSelect={this.onFilterSelect}
                     />
                 </div>
                 <PostList

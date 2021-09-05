@@ -19,8 +19,8 @@ const PostList = ({ posts, onDelete, onToggleFavorite, onToggleLike }) => {
                 <li key={id} className='list-group-item'>
                     <PostListItem
                         onDelete={() => onDelete(id)}
-                        onToggleFavorite={() => onToggleFavorite(id)}
-                        onToggleLike={() => onToggleLike(id)}
+                        onToggleFavorite={() => onToggleFavorite(id, 'favorite')}
+                        onToggleLike={() => onToggleLike(id, 'liked')}
                         label={item.label}
                         favorite={item.favorite}
                         liked={item.liked}

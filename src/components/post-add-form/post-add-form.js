@@ -19,7 +19,6 @@ export default class PostAddForm extends Component {
                 userInput: e.target.value
             }
         })
-        console.log(this.state.userInput);
     }
     //submite handler
     onSubmit(e) {
