@@ -16,7 +16,8 @@ export default class App extends Component {
                 { label: 'Want to learn react', favorite: true, liked: false, id: 'qqweqe' },
                 { label: 'Wanna play tennis', favorite: false, liked: false, id: 'wewq12ewq' },
                 { label: 'Gotta sleep', favorite: false, liked: false, id: 'sadas12asa' }
-            ]
+            ],
+            searchTerm: ''
         }
         this.maxId = 4;
         this.deleteItem = this.deleteItem.bind(this);
@@ -24,7 +25,9 @@ export default class App extends Component {
         this.onToggleFavorite = this.onToggleFavorite.bind(this);
         this.onToggleLike = this.onToggleLike.bind(this);
     }
+   
 
+    // DELETE POST
     deleteItem(id) {
         this.setState(({ data }) => {
             //find which element in array we need to delete
@@ -41,6 +44,7 @@ export default class App extends Component {
         })
 
     }
+    //ADD POST
     addItem(body) {
         const newItem = {
             label: body,
@@ -57,6 +61,7 @@ export default class App extends Component {
         })
     }
 
+    //TOGGLE FAVORITE POST
     onToggleFavorite(id) {
         this.setState(({ data }) => {
             //get elem by in data by index
@@ -76,6 +81,7 @@ export default class App extends Component {
 
         })
     }
+    //TOGGLE LIKE
     onToggleLike(id) {
         this.setState(({ data }) => {
             //get elem by in data by index
@@ -102,6 +108,10 @@ export default class App extends Component {
         const likedPosts = this.state.data.filter(item => item.liked).length;
         //get all posts length
         const allPosts = this.state.data.length;
+        // //get data and searchTerm
+        // const {data, searchTerm} = this.state.data;
+        // //get visible posts
+        // const visiblePosts = this.searchPost(data, searchTerm);
         return (
             <div className='app'>
                 <AppHeader 
