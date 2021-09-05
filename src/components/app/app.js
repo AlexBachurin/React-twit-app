@@ -24,8 +24,24 @@ export default class App extends Component {
         this.addItem = this.addItem.bind(this);
         this.onToggleFavorite = this.onToggleFavorite.bind(this);
         this.onToggleLike = this.onToggleLike.bind(this);
+        this.searchPost = this.searchPost.bind(this);
+        this.onSearchUpdate = this.onSearchUpdate.bind(this);
     }
-   
+    //SEARCH POST
+    searchPost(items, term) {
+        if (term.length === 0) {
+            return items;
+        }
+        return items.filter(item => {
+            return item.label.indexOf(term) > -1
+        })
+    }
+    //update searchterm in main state
+    onSearchUpdate(term) {
+        this.setState({
+            searchTerm: term
+        })
+    }
 
     // DELETE POST
     deleteItem(id) {
@@ -51,7 +67,7 @@ export default class App extends Component {
             favorite: false,
             id: this.maxId++
         }
-        this.setState(({data}) => {
+        this.setState(({ data }) => {
 
             const newData = [newItem, ...data];
 
@@ -68,7 +84,7 @@ export default class App extends Component {
             const index = data.findIndex(item => item.id === id);
             const oldElem = data[index];
             //create new elem with changed like property
-            const newElem = {...oldElem, favorite : !oldElem.favorite}
+            const newElem = { ...oldElem, favorite: !oldElem.favorite }
             //create new array to not mutate array and add changed property into newly
             //created arr
             const beforeArr = data.slice(0, index);
@@ -88,7 +104,7 @@ export default class App extends Component {
             const index = data.findIndex(item => item.id === id);
             const oldElem = data[index];
             //create new elem with changed like property
-            const newElem = {...oldElem, liked : !oldElem.liked}
+            const newElem = { ...oldElem, liked: !oldElem.liked }
             //create new array to not mutate array and add changed property into newly
             //created arr
             const beforeArr = data.slice(0, index);
@@ -109,22 +125,22 @@ export default class App extends Component {
         //get all posts length
         const allPosts = this.state.data.length;
         // //get data and searchTerm
-        // const {data, searchTerm} = this.state.data;
+        const { data, searchTerm } = this.state;
         // //get visible posts
-        // const visiblePosts = this.searchPost(data, searchTerm);
+        const visiblePosts = this.searchPost(data, searchTerm);
         return (
             <div className='app'>
-                <AppHeader 
+                <AppHeader
                     likedPosts={likedPosts}
                     allPosts={allPosts}
-                 />
+                />
                 <div className="search-panel d-flex">
-                    <SearchPanel />
+                    <SearchPanel onSearchUpdate={this.onSearchUpdate} />
                     <PostStatusFilter />
                 </div>
                 <PostList
                     onDelete={this.deleteItem}
-                    posts={this.state.data}
+                    posts={visiblePosts}
                     onToggleFavorite={this.onToggleFavorite}
                     onToggleLike={this.onToggleLike}
                 />
